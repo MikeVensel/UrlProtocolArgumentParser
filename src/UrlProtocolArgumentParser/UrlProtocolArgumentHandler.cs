@@ -52,7 +52,7 @@
         /// <summary>
         /// Gets or sets the handler to be run.
         /// </summary>
-        public CommandHandler Handler { get; set; }
+        public UrlProtocolCommandHandler Handler { get; set; }
 
         /// <summary>
         /// Adds a new argument.

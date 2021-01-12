@@ -28,7 +28,7 @@ namespace UrlProtocolArgumentParser.Tests
 
             protocolHandler.Add("value");
             protocolHandler.Add("uploadUrl");
-            protocolHandler.Handler = CommandHandler.CreateHandler<string>((string uploadUrl) =>
+            protocolHandler.Handler = UrlProtocolCommandHandler.CreateHandler<string>((string uploadUrl) =>
             {
                 handlerReturnValue = uploadUrl;
             });
@@ -49,7 +49,7 @@ namespace UrlProtocolArgumentParser.Tests
             });
 
             protocolHandler.Add("arg1");
-            protocolHandler.Handler = CommandHandler.CreateHandler<string>((string arg1) =>
+            protocolHandler.Handler = UrlProtocolCommandHandler.CreateHandler<string>((string arg1) =>
             {
                 returnValue = arg1;
             });
@@ -69,7 +69,7 @@ namespace UrlProtocolArgumentParser.Tests
                 return urlArg.Name.ToLower() == "queryParam" && argValue == "somevalue";
             });
             protocolHandler.Add("uploadUrl");
-            protocolHandler.Handler = CommandHandler.CreateHandler<string>((string uploadUrl) => 
+            protocolHandler.Handler = UrlProtocolCommandHandler.CreateHandler<string>((string uploadUrl) => 
             {
                 handlerReturnVal = uploadUrl;
             });
@@ -96,7 +96,7 @@ namespace UrlProtocolArgumentParser.Tests
             });
             // todo this string and the variable name in the handler need to match and that doesn't seem ideal
             protocolHandler.Add<TestType>("encodedValue");
-            protocolHandler.Handler = CommandHandler.CreateHandler<TestType>((encodedValue) => 
+            protocolHandler.Handler = UrlProtocolCommandHandler.CreateHandler<TestType>((encodedValue) => 
             {
                 var outputVal = encodedValue;
                 Assert.IsType<TestType>(encodedValue);
