@@ -39,6 +39,26 @@ namespace UrlProtocolArgumentParser.Tests
         }
 
         [Fact]
+        public void TestProtocolUrlEnding()
+        {
+            var url = "test-protocol://arg1=val1/";
+            string returnValue = null;
+            var protocolHandler = new UrlProtocolArgumentHandler(url, (queryArg) => 
+            {
+                return true;
+            });
+
+            protocolHandler.Add("arg1");
+            protocolHandler.Handler = CommandHandler.CreateHandler<string>((string arg1) =>
+            {
+                returnValue = arg1;
+            });
+            protocolHandler.Run();
+            Assert.NotNull(returnValue);
+            Assert.Equal("val1", returnValue);
+        }
+
+        [Fact]
         public void TestFailedCondition()
         {
             var testUrl = "test-protocol://uploadUrl=somethingthatwillneedencoding";

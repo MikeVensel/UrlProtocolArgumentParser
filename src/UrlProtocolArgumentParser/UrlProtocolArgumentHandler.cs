@@ -30,6 +30,11 @@
             this.arguments = new List<QueryParameterArgument>();
             this.queryParameters = new Dictionary<string, string>();
             url = Regex.Replace(url, @".*:\/\/", string.Empty);
+            if (url.EndsWith("/"))
+            {
+                url = url.Substring(0, url.Length - 1);
+            }
+
             var queryParameterValues = url.Split('&');
 
             foreach (var param in queryParameterValues)
