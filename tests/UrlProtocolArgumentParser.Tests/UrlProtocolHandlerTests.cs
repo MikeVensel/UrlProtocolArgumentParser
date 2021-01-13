@@ -26,8 +26,8 @@ namespace UrlProtocolArgumentParser.Tests
                 return urlArg.Name.ToLower() == "value" && argValue.ToLower() == "avalue";
             });
 
-            protocolHandler.Add("value");
-            protocolHandler.Add("uploadUrl");
+            protocolHandler.Add<string>("value");
+            protocolHandler.Add<string>("uploadUrl");
             protocolHandler.Handler = UrlProtocolCommandHandler.CreateHandler<string>((string uploadUrl) =>
             {
                 handlerReturnValue = uploadUrl;
@@ -48,7 +48,7 @@ namespace UrlProtocolArgumentParser.Tests
                 return true;
             });
 
-            protocolHandler.Add("arg1");
+            protocolHandler.Add<string>("arg1");
             protocolHandler.Handler = UrlProtocolCommandHandler.CreateHandler<string>((string arg1) =>
             {
                 returnValue = arg1;
@@ -56,6 +56,29 @@ namespace UrlProtocolArgumentParser.Tests
             protocolHandler.Run();
             Assert.NotNull(returnValue);
             Assert.Equal("val1", returnValue);
+        }
+
+        [Fact]
+        public void TestProtocolUrlWithEncodedString()
+        {
+            var url = "test-protocol://someUrl=https%3A%2F%2Fsome-domain.com%2Fsomeroute&isEnabled=true";
+            string someUrlResult = null;
+            var isEnabledResult = false;
+            var protocolHandler = new UrlProtocolArgumentHandler(url, (queryParemeter) =>
+            {
+                return true;
+            });
+            protocolHandler.Add<string>("someUrl");
+            protocolHandler.Add<bool>("isEnabled");
+            protocolHandler.Handler = UrlProtocolCommandHandler.CreateHandler<string, bool>((string someUrl, bool isEnabled) =>
+            {
+                someUrlResult = someUrl;
+                isEnabledResult = isEnabled;
+            });
+            protocolHandler.Run();
+            Assert.NotNull(someUrlResult);
+            Assert.Equal("https://some-domain.com/someroute", someUrlResult);
+            Assert.True(isEnabledResult);
         }
 
         [Fact]
@@ -68,7 +91,7 @@ namespace UrlProtocolArgumentParser.Tests
                 var argValue = (string)urlArg.Value;
                 return urlArg.Name.ToLower() == "queryParam" && argValue == "somevalue";
             });
-            protocolHandler.Add("uploadUrl");
+            protocolHandler.Add<string>("uploadUrl");
             protocolHandler.Handler = UrlProtocolCommandHandler.CreateHandler<string>((string uploadUrl) => 
             {
                 handlerReturnVal = uploadUrl;

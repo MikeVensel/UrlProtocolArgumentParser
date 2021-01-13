@@ -67,25 +67,6 @@
         /// Adds a new argument.
         /// </summary>
         /// <param name="queryParameter">The query string parameter name.</param>
-        public void Add(string queryParameter)
-        {
-            var argument = new QueryParameterArgument(queryParameter);
-            if (this.queryParameters.TryGetValue(queryParameter, out var paramValue))
-            {
-                argument.Value = paramValue;
-            }
-            else
-            {
-                argument.Value = string.Empty;
-            }
-
-            this.arguments.Add(argument);
-        }
-
-        /// <summary>
-        /// Adds a new argument.
-        /// </summary>
-        /// <param name="queryParameter">The query string parameter name.</param>
         /// <typeparam name="T">The expected type of the query string parameter value.</typeparam>
         public void Add<T>(string queryParameter)
         {
@@ -93,7 +74,15 @@
             if (this.queryParameters.TryGetValue(queryParameter, out var paramValue))
             {
                 var decodedParam = WebUtility.UrlDecode(paramValue);
-                argument.Value = JsonSerializer.Deserialize<T>(decodedParam);
+                if ((decodedParam.StartsWith("{") && decodedParam.EndsWith("}"))
+                    || (decodedParam.StartsWith("[") && decodedParam.StartsWith("]")))
+                {
+                    argument.Value = JsonSerializer.Deserialize<T>(decodedParam);
+                }
+                else
+                {
+                    argument.Value = (T)Convert.ChangeType(decodedParam, typeof(T));
+                }
             }
             else
             {
