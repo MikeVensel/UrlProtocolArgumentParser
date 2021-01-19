@@ -18,8 +18,8 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Restore dependencies
-      run: dotnet restore .\src\UrlProtocolArgumentParser\UrlProtocolArgumentParser.csproj
+      run: dotnet restore src/UrlProtocolArgumentParser/UrlProtocolArgumentParser.csproj
     - name: Build
-      run: dotnet build --no-restore .\src\UrlProtocolArgumentParser\UrlProtocolArgumentParser.csproj
+      run: dotnet build --no-restore src/UrlProtocolArgumentParser/UrlProtocolArgumentParser.csproj
     - name: Test
-      run: dotnet test --no-build --verbosity normal .\tests\UrlProtocolArgumentParser.Tests\UrlProtocolArgumentParser.Tests.csproj
+      run: dotnet test --no-build --verbosity normal tests/UrlProtocolArgumentParser.Tests/UrlProtocolArgumentParser.Tests.csproj
